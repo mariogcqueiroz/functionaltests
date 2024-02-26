@@ -10,7 +10,8 @@ def app(environ, start_response):
     if path == "/app/feedback":
         if method == "POST":
             body = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
-            data = body.getvalue('name') + " " + body.getvalue('email')+ " " + body.getvalue('feedback')
+            message = body.getvalue('name') + " " + body.getvalue('email') + " " + body.getvalue('feedback')
+            data = message.encode('utf-8')
     start_response("200 OK", [
         ("Content-Type", "text/plain"),
         ("Content-Length", str(len(data)))
