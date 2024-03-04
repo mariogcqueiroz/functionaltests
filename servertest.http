@@ -1,8 +1,8 @@
-POST http://localhost:6680/app/feedback
+POST http://localhost:6980/app/feedback
 Content-Type: application/x-www-form-urlencoded
 
 name = asdasda &
-email = asdasd%40asdads.com &
+email = asdasdasdads.com &
 feedback = asdasdasd
 
 ###
