@@ -7,15 +7,19 @@ function app() {
 
     if ($path == "/app") {
         $data = "Hello World on php!";
-    } elseif ($path == "/app/feedback" && $method == "POST") {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $feedback = $_POST['feedback'];
-        $data = "$name $email $feedback";
+    } else {
+        if ($path == "/app/feedback") {
+            if ($method == "POST") {
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+                $feedback = $_POST['feedback'];
+                $data = "$name $email $feedback";
+            }
+            else {
+                include ('feedback.php');
+            }
+        }
     }
-
-    header("Content-Type: text/plain");
-    header("Content-Length: " .strlen($data));
 
     echo $data;
 }
