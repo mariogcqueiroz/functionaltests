@@ -9,7 +9,7 @@ services:
     ports:
       - "6680:80"
   app:
-    build: .
+    build: local/python-app
     restart: always
     container_name: pweb-py
     volumes:
