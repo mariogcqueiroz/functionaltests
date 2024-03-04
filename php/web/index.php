@@ -9,7 +9,7 @@ function app() {
         $data = "Hello World on php!";
     } elseif ($path == "/app/feedback" && $method == "POST") {
         $name = $_POST['name'];
-        $email = $_POST['asdsdd'];
+        $email = $_POST['email'];
         $feedback = $_POST['feedback'];
         $data = "$name $email $feedback";
     }
