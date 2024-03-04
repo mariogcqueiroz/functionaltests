@@ -18,7 +18,14 @@ function app() {
                 $email = $_POST['email'];
                 $feedback = $_POST['feedback'];
                 if (strpos($email,"@")) {
-                    $data = "$name $email $feedback";
+                    $dsn= "pgsql:host=db;dbname=site;port=5432";
+                    $username = 'app';
+                    $password = 'app2024';
+                    $conexao = new \PDO($dsn, $username, $password);
+                    $sql = "INSERT INTO feedback(nome,email,feedback)
+                                 VALUES ('$name','$email','feedback')";
+                    $conexao->exec($sql);
+                    $data = "Dados salvos com sucesso";
                 } else {
                     $erro="Email deve conter @";
                     include ('feedback.php');

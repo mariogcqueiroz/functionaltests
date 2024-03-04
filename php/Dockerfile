@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-bullseye
+FROM php:8.2-fpm-bullseye
 #sempre use versoes numeradas
 RUN apt update
 RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
@@ -7,6 +7,8 @@ COPY web /app
 WORKDIR /app
 RUN composer install
 COPY php.ini "$PHP_INI_DIR/php.ini"
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN install-php-extensions pdo_pgsql
 EXPOSE 9000
 
 CMD ["php-fpm"]
