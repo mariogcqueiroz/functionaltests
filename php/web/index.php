@@ -23,7 +23,8 @@ function app() {
                     $password = 'app2024';
                     $conexao = new \PDO($dsn, $username, $password);
                     $sql = "INSERT INTO feedback(nome,email,feedback)
-                                 VALUES ('$name','$email','feedback')";
+                                 VALUES ('$name','$email','$feedback')";
+
                     $conexao->exec($sql);
                     $data = "Dados salvos com sucesso";
                 } else {
