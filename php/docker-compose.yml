@@ -27,11 +27,12 @@ services:
     depends_on:
       - nginx
       - db
-    build: .
+    build:
+      context: ./app
     restart: always
     container_name: pweb-php
     volumes:
-      - ./web:/app
+      - ./app/web:/app/web
     #Nao publique porta
 volumes:
   base_feedback:
