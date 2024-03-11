@@ -31,7 +31,7 @@ services:
     restart: always
     container_name: pweb-php
     volumes:
-      - ./web:/app:ro
+      - ./web:/app
     #Nao publique porta
 volumes:
   base_feedback:
