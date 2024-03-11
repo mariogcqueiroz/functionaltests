@@ -1,10 +1,11 @@
 <?php
-include_once "../vendor/autoload.php";
+include_once "./vendor/autoload.php";
 
 use Illuminate\Database\Model;
-use Illuminate\Databas\Capsule\Manger as Capsule;
+use Illuminate\Databas\Capsule\Manager as Capsule;
 
-$capsule= New Capsule\;
+
+$capsule= New Capsule;
 $capsule->addConnection([
     "driver"=>"pgqsl",
     "host"=>"db",
