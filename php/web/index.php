@@ -3,10 +3,10 @@
 function app() {
     $path = $_SERVER["REQUEST_URI"];
     $method = $_SERVER["REQUEST_METHOD"];
-    $data = "";
+
 
     if ($path == "/app") {
-        $data = "Hello World on php!";
+        echo "Hello World on php!";
     } else {
         if ($path == "/app/feedback") {
             $name = "";
@@ -29,7 +29,7 @@ function app() {
                     $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':feedback', $feedback);
                     $stmt->execute();
-                    $data = "Dados salvos com sucesso";
+                    include ('view.php');
                 } else {
                     $erro="Email deve conter @";
                     include ('feedback.php');
@@ -40,7 +40,7 @@ function app() {
             }
         }
     }
-    echo $data;
+
 }
 
 app();
