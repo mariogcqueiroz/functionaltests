@@ -23,9 +23,12 @@ function app() {
                     $password = 'app2024';
                     $conexao = new \PDO($dsn, $username, $password);
                     $sql = "INSERT INTO feedback(nome,email,feedback)
-                                 VALUES ('$name','$email','$feedback')";
-
-                    $conexao->exec($sql);
+                                 VALUES (:nome, :email,:feedback)";
+                    $stmt = $conexao->prepare($sql);
+                    $stmt->bindParam(':nome', $nome);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->bindParam(':feedback', $feedback);
+                    $stmt->execute();
                     $data = "Dados salvos com sucesso";
                 } else {
                     $erro="Email deve conter @";
