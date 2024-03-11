@@ -1,4 +1,19 @@
 <?php
+include_once "../vendor/autoload.php";
+
+use Illuminate\Database\Model;
+use Illuminate\Databas\Capsule\Manger as Capsule;
+
+$capsule= New Capsule\;
+$capsule->addConnection([
+    "driver"=>"pgqsl",
+    "host"=>"db",
+    "databse"=>"site",
+    "username"=>"app",
+    "password"=>"app2024"
+]);
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
 
 function app() {
     $path = $_SERVER["REQUEST_URI"];
@@ -16,7 +31,7 @@ function app() {
             if ($method == "POST") {
                 $nome = $_POST['name'];
                 $email = $_POST['email'];
-                $feedback = $_POST['feedback'];
+                $feedback = htmlspecialchars($_POST['feedback']);
                 if (strpos($email,"@")) {
                     $dsn= "pgsql:host=db;dbname=site;port=5432";
                     $username = 'app';
@@ -27,6 +42,7 @@ function app() {
                     $stmt = $conexao->prepare($sql);
                     $stmt->bindParam(':nome', $nome);
                     $stmt->bindParam(':email', $email);
+                    //<a href="url_do_seu_destino">Texto do Link</a>
                     $stmt->bindParam(':feedback', $feedback);
                     $stmt->execute();
                     include ('view.php');

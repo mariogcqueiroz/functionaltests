@@ -2,6 +2,7 @@
     "name": "ifg/pweb",
     "description": "Web Programing",
     "require": {
-        "php": ">=8.2.0"
+        "php": ">=8.2.0",
+        "illuminate/database": "^10.4"
     }
 }
