@@ -9,12 +9,12 @@ function app() {
         echo "Hello World on php!";
     } else {
         if ($path == "/app/feedback") {
-            $name = "";
+            $nome = "";
             $email = "";
             $feedback = "";
             $erro="";
             if ($method == "POST") {
-                $name = $_POST['name'];
+                $nome = $_POST['name'];
                 $email = $_POST['email'];
                 $feedback = $_POST['feedback'];
                 if (strpos($email,"@")) {

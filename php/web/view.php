@@ -11,24 +11,22 @@
     <h1>Fedback </h1>
         <div class="form-group">
             <label>
-                Nome
+                Nome:
                 <?=$nome?>
             </label>
         </div>
         <div class="form-group">
             <label>
-                Email
+                Email:
                 <?=$email?>
             </label>
         </div>
         <div class="form-group">
             <label>
-                Feddback
+                Feddback:
                 <?=$feedback?>
             </label>
         </div>
-
-    </form>
 </div>
 
 <!-- Adiciona o JavaScript do Bootstrap -->
