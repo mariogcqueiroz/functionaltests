@@ -32,7 +32,8 @@ services:
     restart: always
     container_name: pweb-php
     volumes:
-      - ./app/web:/app/web
+      - ./app:/app
+    command: bash -c "composer install && php-fpm"
     #Nao publique porta
 volumes:
   base_feedback:

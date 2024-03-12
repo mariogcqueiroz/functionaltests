@@ -1,9 +1,8 @@
 <?php
-include_once "/vendor/autoload.php";
+include_once "../vendor/autoload.php";
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Capsule\Manager as Capsule;
-
 
 class Feedback extends Model
 {
