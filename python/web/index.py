@@ -16,6 +16,7 @@ def app(environ, start_response):
     query = environ["QUERY_STRING"]
     data=""
     status="200 OK"
+    redirect_url= ''
     if path == "/app":
         data = "Hello, Web!\n"
     if path == "/app/feedback/view":
@@ -41,7 +42,9 @@ def app(environ, start_response):
             feedback.feedback=form.getvalue("feedback")
             if "@" in feedback.email:
                 feedback.save()
-                #colocar a lógica de redirecionamento aqui
+                status = "302 Found"
+                redirect_url= '/app/feedback/view?id=' + str(feedback.id)
+
             else:
                 data =data.replace("<?=$feedback['name']?>",feedback.nome)
                 data =data.replace("<?=$feedback['email']?>",feedback.email)
@@ -55,6 +58,7 @@ def app(environ, start_response):
 
     start_response(status, [
         ("Content-Type", "text/html"),
+        ("location",redirect_url ),
         ("Content-Length", str(len(data)))
     ])
     return [data.encode()]
