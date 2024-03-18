@@ -18,6 +18,7 @@ services:
   nginx:
     build:
       context: ./nginx
+    restart: always
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/static-content:/var/www/html:ro
