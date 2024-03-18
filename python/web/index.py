@@ -1,8 +1,9 @@
 import cgi
+from urllib.parse import parse_qs
 from wsgiref import simple_server
 from orator import DatabaseManager
 from orator import Model
-from urllib.parse import parse_qs
+
 
 
 class Feedback(Model):
@@ -18,8 +19,7 @@ def app(environ, start_response):
         data = "Hello, Web!\n"
     if path == "/app/feedback/view":
         params = parse_qs(query)
-        id_value = params['id'][0]
-        feedback = Feedback.find(id_value)
+        feedback = Feedback.find(params['id'][0])
         with open("./view/feedback/view.html", "r") as f:
             data = f.read()
         data =data.replace("<?=$feedback['name']?>",feedback.nome)
@@ -30,6 +30,7 @@ def app(environ, start_response):
             data = f.read()
         if method == "POST":
             form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
+            feedback = Feedback()
             feedback.nome=form.getvalue("name")
             feedback.email=form.getvalue("email")
             feedback.feedback=form.getvalue("feedback")
