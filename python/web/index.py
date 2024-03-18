@@ -15,7 +15,7 @@ def app(environ, start_response):
     if path == "/app":
         data = "Hello, Web!\n"
     if path == "/app/feedback":
-        with open("feedback.html", "r") as f:
+        with open("./view/feedback/create.html", "r") as f:
             data = f.read()
         if method == "POST":
             form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
@@ -24,10 +24,14 @@ def app(environ, start_response):
             feedback.email=form.getvalue("email")
             feedback.feedback=form.getvalue("feedback")
             if "@" in feedback.email:
-                data = "Your feedback submitted successfully."
+                with open("./view/feedback/view.html", "r") as f:
+                    data = f.read()
+                data =data.replace("<?=$feedback['name']?>",feedback.nome)
+                data =data.replace("<?=$feedback['email']?>",feedback.email)
+                data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
                 feedback.save()
             else:
-                data =data.replace("<?=$feedback['name']?>",feedback.name)
+                data =data.replace("<?=$feedback['name']?>",feedback.nome)
                 data =data.replace("<?=$feedback['email']?>",feedback.email)
                 data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
                 data =data.replace("<?=$error['email']?>",'Email deve conter @')
