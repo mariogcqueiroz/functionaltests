@@ -1,7 +1,12 @@
 import cgi
 from wsgiref import simple_server
-import psycopg2
+from orator import DatabaseManager
+from orator import Model
 
+
+class Feedback(Model):
+    __table__ = 'feedback'
+    __timestamps__ = False
 
 def app(environ, start_response):
     path = environ["PATH_INFO"]
@@ -14,31 +19,17 @@ def app(environ, start_response):
             data = f.read()
         if method == "POST":
             form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
-            feedback = {
-                "name": form.getvalue("name"),
-                "email": form.getvalue("email"),
-                "feedback": form.getvalue("feedback"),
-            }
-            if "@" in feedback["email"]:
+            feedback = Feedback()
+            feedback.nome=form.getvalue("name")
+            feedback.email=form.getvalue("email")
+            feedback.feedback=form.getvalue("feedback")
+            if "@" in feedback.email:
                 data = "Your feedback submitted successfully."
-                conn = psycopg2.connect(
-                    host="db",
-                    dbname="site",
-                    port=5432,
-                    user="app",
-                    password="app2024"
-                )
-                cur = conn.cursor()
-                sql = f"INSERT INTO feedback(nome, email, feedback) " \
-                      f"VALUES ('{feedback['name']}', '{feedback['email']}', '{feedback['feedback']}')"
-                cur.execute(sql)
-                conn.commit()
-                cur.close()
-                conn.close()
+                feedback.save()
             else:
-                data =data.replace("<?=$feedback['name']?>",feedback['name'])
-                data =data.replace("<?=$feedback['email']?>",feedback['email'])
-                data =data.replace("<?=$feedback['feedback']?>",feedback['feedback'])
+                data =data.replace("<?=$feedback['name']?>",feedback.name)
+                data =data.replace("<?=$feedback['email']?>",feedback.email)
+                data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
                 data =data.replace("<?=$error['email']?>",'Email deve conter @')
         else:
             data =data.replace("<?=$feedback['name']?>","")
@@ -53,6 +44,19 @@ def app(environ, start_response):
     return [data.encode()]
 
 if __name__ == '__main__':
+    config = {
+        'pgsql': {
+            'driver': 'pgsql',
+            'host': 'db',
+            'database': 'site',
+            'user': 'app',
+            'password': 'app2024',
+            'prefix': ''
+        }
+    }
+
+    db = DatabaseManager(config)
+    Model.set_connection_resolver(db)
     w_s = simple_server.make_server(
         host="",
         port=8000,
