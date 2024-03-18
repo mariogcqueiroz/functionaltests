@@ -26,7 +26,7 @@ services:
     restart: always
     container_name: pweb-py
     volumes:
-      - ./web:/app:ro
+      - ./web:/app
     working_dir: /app
 volumes:
   base_feedback_py:
