@@ -15,16 +15,21 @@ def app(environ, start_response):
     method = environ["REQUEST_METHOD"]
     query = environ["QUERY_STRING"]
     data=""
+    status="200 OK"
     if path == "/app":
         data = "Hello, Web!\n"
     if path == "/app/feedback/view":
         params = parse_qs(query)
-        feedback = Feedback.find(params['id'][0])
-        with open("./view/feedback/view.html", "r") as f:
-            data = f.read()
-        data =data.replace("<?=$feedback['name']?>",feedback.nome)
-        data =data.replace("<?=$feedback['email']?>",feedback.email)
-        data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
+        feedback =Feedback.find(params['id'][0])
+        if feedback:
+            with open("./view/feedback/view.html", "r") as f:
+                data = f.read()
+            data =data.replace("<?=$feedback['name']?>",feedback.nome)
+            data =data.replace("<?=$feedback['email']?>",feedback.email)
+            data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
+        else:
+            data = "Feedback not found"
+            status = '404 Not Found'  # Status HTTP 404 para recurso não encontrado
     if path == "/app/feedback/create":
         with open("./view/feedback/create.html", "r") as f:
             data = f.read()
@@ -35,12 +40,8 @@ def app(environ, start_response):
             feedback.email=form.getvalue("email")
             feedback.feedback=form.getvalue("feedback")
             if "@" in feedback.email:
-                with open("./view/feedback/view.html", "r") as f:
-                    data = f.read()
-                data =data.replace("<?=$feedback['name']?>",feedback.nome)
-                data =data.replace("<?=$feedback['email']?>",feedback.email)
-                data =data.replace("<?=$feedback['feedback']?>",feedback.feedback)
                 feedback.save()
+                #colocar a lógica de redirecionamento aqui
             else:
                 data =data.replace("<?=$feedback['name']?>",feedback.nome)
                 data =data.replace("<?=$feedback['email']?>",feedback.email)
@@ -52,7 +53,7 @@ def app(environ, start_response):
             data =data.replace("<?=$feedback['feedback']?>","")
             data =data.replace("<?=$error['email']?>",'')
 
-    start_response("200 OK", [
+    start_response(status, [
         ("Content-Type", "text/html"),
         ("Content-Length", str(len(data)))
     ])
