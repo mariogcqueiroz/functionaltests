@@ -22,19 +22,16 @@ class FeedbackController
         }
         include('../views/feedback/create.php');
     }
-    public function view()
+    public function view($id)
     {
-
-            $feedback = Feedback::find($_GET['id']);
-            if ($feedback) {
-                include('../views/feedback/view.php');
-            }
-            else {
-                $error="Feedback não encontrado";
-                http_response_code(404);
-                include('../views/404.php');
-            }
-
+        $feedback = Feedback::find($id);
+        if ($feedback) {
+            include('../views/feedback/view.php');
+        }
+        else {
+            $error="Feedback não encontrado";
+            http_response_code(404);
+            include('../views/404.php');
+        }
     }
-
 }
