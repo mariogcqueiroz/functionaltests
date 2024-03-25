@@ -34,4 +34,9 @@ class FeedbackController
             include('../views/404.php');
         }
     }
+    public function index()
+    {
+        $results=Feedback::all();
+        include('../views/feedback/index.php');
+    }
 }

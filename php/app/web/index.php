@@ -19,7 +19,8 @@ function app() {
     $path_array= explode('/',$path);
     $classname= '\\App\\controllers\\'.ucfirst($path_array[2]).'Controller';
     $instance = new $classname();
-    $instance->{$path_array[3]}($_GET['id']??"");
+    parse_str($_SERVER['QUERY_STRING'], $param);
+    $instance->{$path_array[3]??'index'}(...array_values($param));
 }
 
 app();
