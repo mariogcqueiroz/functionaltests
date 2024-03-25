@@ -39,4 +39,19 @@ class FeedbackController
         $results=Feedback::all();
         include('../views/feedback/index.php');
     }
+    public function delete($id)
+    {
+        $feedback = Feedback::find($id);
+        if($feedback){
+            $feedback->delete();
+            http_response_code(302);
+            $redirect_url = '/app/feedback/index';
+            header("Location: " . $redirect_url);
+            return;
+        }
+        $error="Feedback não encontrado";
+        http_response_code(404);
+        include('../views/404.php');
+    }
+
 }
