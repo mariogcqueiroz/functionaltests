@@ -9,6 +9,7 @@ class FeedbackController
     {
         $feedback= New Feedback;
         $erro="";
+        $action="/app/feedback/create";
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $feedback->nome=$_POST['name'];
             $feedback->email=$_POST['email'];
@@ -41,7 +42,7 @@ class FeedbackController
     }
     public function delete($id)
     {
-        $feedback = Feedback::find($id);
+        $feedback = is_numeric($id)?Feedback::find($id):null;
         if($feedback){
             $feedback->delete();
             http_response_code(302);
@@ -53,5 +54,22 @@ class FeedbackController
         http_response_code(404);
         include('../views/404.php');
     }
-
+    public function update($id)
+    {
+        $feedback = Feedback::find($id);
+        $erro="";
+        $action="/app/feedback/update?id=".$id;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $feedback->nome=$_POST['name'];
+            $feedback->email=$_POST['email'];
+            $feedback->feedback= htmlspecialchars($_POST['feedback']);
+            if ($feedback->save()) {
+                http_response_code(302);
+                $redirect_url = '/app/feedback/view?id='.$feedback->id;
+                header("Location: ".$redirect_url);
+                return;
+            } else  $erro="Email deve conter @";
+        }
+        include('../views/feedback/create.php');
+    }
 }

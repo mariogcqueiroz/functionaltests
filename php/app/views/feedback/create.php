@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <h1>Formulário Feedback</h1>
-    <form action="/app/feedback/create" method="post" >
+    <form action="<?=$action?>" method="post" >
         <p class="text-danger"><?=$erro?></p>
         <div class="form-group">
             <label>
