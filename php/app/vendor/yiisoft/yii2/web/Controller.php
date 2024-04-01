@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,10 +17,6 @@ use yii\helpers\Url;
  * Controller is the base class of web controllers.
  *
  * For more details and usage information on Controller, see the [guide article on controllers](guide:structure-controllers).
- *
- * @property Request $request The request object.
- * @property Response $response The response object.
- * @property View $view The view object that can be used to render views or view files.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -145,6 +142,7 @@ class Controller extends \yii\base\Controller
                 } elseif (
                     PHP_VERSION_ID >= 70000
                     && ($type = $param->getType()) !== null
+                    && method_exists($type, 'isBuiltin')
                     && $type->isBuiltin()
                     && ($params[$name] !== null || !$type->allowsNull())
                 ) {

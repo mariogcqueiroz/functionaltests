@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -133,13 +134,13 @@ class View extends \yii\base\View
 
     private $_assetManager;
 
+
     /**
      * Whether [[endPage()]] has been called and all files have been registered
      * @var bool
      * @since 2.0.44
      */
     protected $isPageEnded = false;
-
 
     /**
      * Marks the position of an HTML head section.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -317,7 +318,7 @@ class DbCache extends Cache
      */
     protected function getDataFieldName()
     {
-        return $this->isVarbinaryDataField() ? 'convert(nvarchar(max),[data]) data' : 'data';
+        return $this->isVarbinaryDataField() ? 'CONVERT(VARCHAR(MAX), [[data]]) data' : 'data';
     }
 
     /**

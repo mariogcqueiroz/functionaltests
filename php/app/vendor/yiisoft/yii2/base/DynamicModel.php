@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -201,6 +202,7 @@ class DynamicModel extends Model
         }
 
         $validators->append($validator);
+        $this->defineAttributesByValidator($validator);
 
         return $this;
     }
@@ -223,9 +225,11 @@ class DynamicModel extends Model
             foreach ($rules as $rule) {
                 if ($rule instanceof Validator) {
                     $validators->append($rule);
+                    $model->defineAttributesByValidator($rule);
                 } elseif (is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
                     $validator = Validator::createValidator($rule[1], $model, (array)$rule[0], array_slice($rule, 2));
                     $validators->append($validator);
+                    $model->defineAttributesByValidator($validator);
                 } else {
                     throw new InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
                 }
@@ -235,6 +239,19 @@ class DynamicModel extends Model
         $model->validate();
 
         return $model;
+    }
+
+    /**
+     * Define the attributes that applies to the specified Validator.
+     * @param Validator $validator the validator whose attributes are to be defined.
+     */
+    private function defineAttributesByValidator($validator)
+    {
+        foreach ($validator->getAttributeNames() as $attribute) {
+            if (!$this->hasAttribute($attribute)) {
+                $this->defineAttribute($attribute);
+            }
+        }
     }
 
     /**

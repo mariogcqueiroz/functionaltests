@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -648,7 +649,6 @@ class QueryBuilder extends \yii\base\BaseObject
         $columnSchemas = $tableSchema !== null ? $tableSchema->columns : [];
         $sets = [];
         foreach ($columns as $name => $value) {
-
             $value = isset($columnSchemas[$name]) ? $columnSchemas[$name]->dbTypecast($value) : $value;
             if ($value instanceof ExpressionInterface) {
                 $placeholder = $this->buildExpression($value, $params);
@@ -692,7 +692,7 @@ class QueryBuilder extends \yii\base\BaseObject
      *
      * The columns in the new table should be specified as name-definition pairs (e.g. 'name' => 'string'),
      * where name stands for a column name which will be properly quoted by the method, and definition
-     * stands for the column type which can contain an abstract DB type.
+     * stands for the column type which must contain an abstract DB type.
      * The [[getColumnType()]] method will be invoked to convert any abstract type into a physical one.
      *
      * If a column is specified with definition only (e.g. 'PRIMARY KEY (name, type)'), it will be directly
@@ -705,6 +705,7 @@ class QueryBuilder extends \yii\base\BaseObject
      *  'id' => 'pk',
      *  'name' => 'string',
      *  'age' => 'integer',
+     *  'column_name double precision null default null', # definition only example
      * ]);
      * ```
      *
@@ -1526,7 +1527,7 @@ class QueryBuilder extends \yii\base\BaseObject
             $result[] = $with['alias'] . ' AS (' . $with['query'] . ')';
         }
 
-        return 'WITH ' . ($recursive ? 'RECURSIVE ' : '') . implode (', ', $result);
+        return 'WITH ' . ($recursive ? 'RECURSIVE ' : '') . implode(', ', $result);
     }
 
     /**

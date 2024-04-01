@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -57,8 +58,8 @@ class Cookie extends \yii\base\BaseObject
      */
     public $domain = '';
     /**
-     * @var int the timestamp at which the cookie expires. This is the server timestamp.
-     * Defaults to 0, meaning "until the browser is closed".
+     * @var int|string|\DateTimeInterface|null the timestamp or date at which the cookie expires. This is the server timestamp.
+     * Defaults to 0, meaning "until the browser is closed" (the same applies to `null`).
      */
     public $expire = 0;
     /**
