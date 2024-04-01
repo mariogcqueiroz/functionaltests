@@ -31,17 +31,18 @@ services:
       - "6980:80"
     #Se seu host roda linux, substitua host.docker.internal com o resultado do comando abaixo executado dentro do container e restarte o container
     ## $ ip route | grep docker0 | awk '{print $9}'
-    command: bash -c "chown -R www-data:www-data /app/web/assets
+    command: bash -c "chown -R www-data:www-data /app/web
       && chown -R www-data:www-data  /app/runtime
       && chown -R www-data:www-data  /app/models
       && chown -R www-data:www-data  /app/controllers
       && chown -R www-data:www-data  /app/views
-      && chmod -R 755 /app/web/assets
+      && chmod -R 755 /app/web
       && chmod -R 755 /app/runtime
       && chmod -R 755 /app/models
       && chmod -R 755 /app/views
       && chmod -R 755 /app/controllers
       && chmod +x /app/yii
+      && composer install
       && ./yii migrate --interactive=0
       && export XDEBUG_CONFIG=\"remote_connect_back=0 remote_enable=1 remote_host=host.docker.internal\"
       && supervisord -c  /etc/supervisor/supervisord.conf"
