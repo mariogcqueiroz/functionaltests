@@ -40,6 +40,7 @@ class FeedbackController(Controller):
         return self.getResponse()
 
     def view(self, id):
+        logging.debug(id)
         feedback = Feedback.find(id[0])
         if feedback:
             with open("./views/feedback/view.php", "r") as f:

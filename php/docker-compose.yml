@@ -15,27 +15,36 @@ services:
       LANG: pt_BR.utf8
     ports:
       - "5475:5432"
-  nginx:
-    build:
-      context: ./nginx
-    restart: always
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/static-content:/var/www/html:ro
-    ports:
-      - "6980:80"
   app:
-    depends_on:
-      - nginx
-      - db
-    build:
-      context: ./app
+    image: dmstr/php-yii2:latest-nginx
     restart: always
     container_name: pweb-php
     volumes:
       - ./app:/app
-    command: bash -c "composer install && php-fpm"
-    #Nao publique porta
+    working_dir: /app
+    environment:
+      - PHP_ENABLE_XDEBUG=0
+      - DB_DATABASE= $DB
+      - DB_USERNAME= $USER
+      - DB_PASSWORD= $PASS
+    ports:
+      - "6980:80"
+    #Se seu host roda linux, substitua host.docker.internal com o resultado do comando abaixo executado dentro do container e restarte o container
+    ## $ ip route | grep docker0 | awk '{print $9}'
+    command: bash -c "chown -R www-data:www-data /app/web/assets
+      && chown -R www-data:www-data  /app/runtime
+      && chown -R www-data:www-data  /app/models
+      && chown -R www-data:www-data  /app/controllers
+      && chown -R www-data:www-data  /app/views
+      && chmod -R 755 /app/web/assets
+      && chmod -R 755 /app/runtime
+      && chmod -R 755 /app/models
+      && chmod -R 755 /app/views
+      && chmod -R 755 /app/controllers
+      && chmod +x /app/yii
+      && ./yii migrate --interactive=0
+      && export XDEBUG_CONFIG=\"remote_connect_back=0 remote_enable=1 remote_host=host.docker.internal\"
+      && supervisord -c  /etc/supervisor/supervisord.conf"
 volumes:
   base_feedback:
     external: true
