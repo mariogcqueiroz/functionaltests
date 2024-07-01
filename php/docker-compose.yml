@@ -16,7 +16,7 @@ services:
     ports:
       - "5475:5432"
   app:
-    image: dmstr/php-yii2:latest-nginx
+    image: yiisoftware/yii2-php:8.1-fpm-nginx
     restart: always
     container_name: pweb-php
     volumes:

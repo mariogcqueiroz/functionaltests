@@ -5,6 +5,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\NavBar;
+use yii\bootstrap\Nav;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -32,7 +33,25 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['/site/login']]
+                : '<li class="nav-item">'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'nav-link btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+        ]
+    ]);
+    NavBar::end();
     ?>
 </header>
 
@@ -47,7 +66,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Fábrica de Software Shannon - Ciência da Computação</p>
+        <p class="pull-left">Ciência da Computação</p>
         <p class="pull-right">IFG Anápolis <?= date('Y') ?></p>
     </div>
 </footer>
