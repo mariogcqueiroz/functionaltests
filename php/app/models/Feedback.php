@@ -32,6 +32,7 @@ class Feedback extends \yii\db\ActiveRecord
             [['nome', 'email', 'feedback'], 'string'],
             [['idade'], 'default', 'value' => null],
             [['idade'], 'integer'],
+            [['email'], 'email','checkDNS'=> true],
         ];
     }
 

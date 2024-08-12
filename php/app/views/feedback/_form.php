@@ -10,7 +10,10 @@ use yii\widgets\ActiveForm;
 
 <div class="feedback-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+        $form = ActiveForm::begin();
+        echo $form->errorSummary($model);
+    ?>
 
     <?= $form->field($model, 'nome')->textInput() ?>
 
