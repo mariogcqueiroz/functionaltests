@@ -2,7 +2,14 @@ from django import get_version
 from django.views.generic import TemplateView
 from .tasks import show_hello_world
 from .models import DemoModel
+from django.shortcuts import render, get_object_or_404
+from .models import Feedback
 # Create your views here.
+def feedback_view(request, id):
+    feedback = get_object_or_404(Feedback, id=id)
+    response = render(request, '../templates/feedback_view.html',
+                      {'feedback': feedback})
+    return response
 
 
 class ShowHelloWorld(TemplateView):
