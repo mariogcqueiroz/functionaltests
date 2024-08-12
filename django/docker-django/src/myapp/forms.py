@@ -1,17 +1,7 @@
 from django import forms
-from .models import ItemBatch
-
-
-class SomeForm(forms.ModelForm):
+from .models import Feedback
+class FeedbackForm(forms.ModelForm):
+    nome = forms.CharField(widget=forms.TextInput)
     class Meta:
-        model = ItemBatch
+        model = Feedback
         fields = '__all__'
-
-    def save(self, commit=True):
-        image = self.cleaned_data.pop('image')
-        instance = super().save(commit=True)
-        # instance.save_m2m()
-        print(image)
-        instance.image = image
-        instance.save()
-        return instance

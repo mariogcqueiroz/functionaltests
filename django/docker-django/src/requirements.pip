@@ -11,3 +11,4 @@ redis==3.5.3
 sqlparse==0.4.1
 vine==5.0.0
 importlib-metadata==4.13.0
+dnspython==2.3
