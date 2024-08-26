@@ -26,3 +26,21 @@ class FeedBackTestCase(TestCase):
         self.assertEqual(response.status_code,302)
         query= Feedback.objects.filter(nome="teste",email="teste@gmail.com",feedback="Nada a delarar")
         self.assertEqual(query.count(),1)
+    def test_error_email_feedback_form(self):
+        c = self.client
+        self.assertTrue(c.login(username="superadmin",password="superadmin"))
+        fakedomain = "asdasdtesteasdad.com"
+        response=c.post("/admin/myapp/feedback/add/", {
+            "nome" : "teste",
+            "email" :"teste@"+fakedomain,
+            "feedback": "Nada a delarar",
+            "_save" : "Save"
+        })
+        self.assertEqual(response.status_code,200)
+        query= Feedback.objects.filter(nome="teste",email="teste@"+fakedomain,
+                                       feedback="Nada a delarar")
+        self.assertEqual(query.count(),0)
+        data= response.content.decode('utf-8')
+        needle = f'O domínio {fakedomain} não possui registros MX válidos.'
+        position=data.find(needle)
+        self.assertNotEquals(position,-1)

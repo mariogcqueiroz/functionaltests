@@ -13,7 +13,6 @@ class Feedback(models.Model):
     nome = models.TextField(blank=True, null=True)
     email = models.EmailField(validators=[checkDns])
     feedback = models.TextField(blank=True, null=True)
-
     class Meta:
         managed = True
         db_table = 'feedback'
