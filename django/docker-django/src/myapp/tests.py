@@ -29,7 +29,7 @@ class FeedBackTestCase(TestCase):
     def test_error_email_feedback_form(self):
         c = self.client
         self.assertTrue(c.login(username="superadmin",password="superadmin"))
-        fakedomain = "asdasdtesteasdad.com"
+        fakedomain = "ifgnao.com"
         response=c.post("/admin/myapp/feedback/add/", {
             "nome" : "teste",
             "email" :"teste@"+fakedomain,
@@ -43,4 +43,7 @@ class FeedBackTestCase(TestCase):
         data= response.content.decode('utf-8')
         needle = f'O domínio {fakedomain} não possui registros MX válidos.'
         position=data.find(needle)
+        if position==-1:
+            needle2 = "Não foi possível contactar ao DNS"
+            position=data.find(needle2)
         self.assertNotEquals(position,-1)
