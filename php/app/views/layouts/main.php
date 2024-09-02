@@ -4,6 +4,7 @@
 /** @var string $content */
 
 use webvimark\modules\UserManagement\components\GhostMenu;
+use webvimark\modules\UserManagement\components\GhostNav;
 use webvimark\modules\UserManagement\UserManagementModule;
 use yii\helpers\Html;
 use yii\bootstrap\NavBar;
@@ -35,7 +36,8 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    echo GhostMenu::widget([
+    echo GhostNav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
         'encodeLabels'=>false,
         'activateParents'=>true,
         'items' => [

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +6,6 @@
  */
 
 namespace yii\base;
-
-use Yii;
 
 /**
  * ErrorException represents a PHP error.

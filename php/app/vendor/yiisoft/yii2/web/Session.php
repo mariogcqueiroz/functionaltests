@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,6 +57,7 @@ use yii\base\InvalidConfigException;
  * @property bool $hasSessionId Whether the current request has sent the session ID.
  * @property string $id The current session ID.
  * @property-read bool $isActive Whether the session has started.
+ * @property-read SessionIterator $iterator An iterator for traversing the session variables.
  * @property string $name The current session name.
  * @property string $savePath The current session save path, defaults to '/tmp'.
  * @property int $timeout The number of seconds after which data will be seen as 'garbage' and cleaned up. The
@@ -106,6 +106,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
      * @var array|null is used for saving session between recreations due to session parameters update.
      */
     private $_frozenSessionData;
+
 
     /**
      * Initializes the application component.

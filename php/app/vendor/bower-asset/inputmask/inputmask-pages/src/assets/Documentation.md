@@ -1093,7 +1093,7 @@ $(selector).inputmask({
 
 ### postValidation
 
-Hook to postValidate the result from isValid.  Usefull for validating the entry as a whole.  Args => buffer, pos, c, currentResult, opts, maskset, strict, fromCheckval<br>Return => true|false|command object
+Hook to postValidate the result from isValid.  Usefull for validating the entry as a whole.  Args => buffer, pos, c, currentResult, opts, maskset, strict, fromCheckval, fromAlternate<br>Return => true|false|command object
 
 ### preValidation
 

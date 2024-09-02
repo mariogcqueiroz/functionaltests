@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\web;
 
-use Yii;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
 

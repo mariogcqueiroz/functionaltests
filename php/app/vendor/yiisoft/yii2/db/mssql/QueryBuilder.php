@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -95,7 +94,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         $sql .= $this->separator . $orderBy;
 
-        // http://technet.microsoft.com/en-us/library/gg699618.aspx
+        // https://technet.microsoft.com/en-us/library/gg699618.aspx
         $offset = $this->hasOffset($offset) ? $offset : '0';
         $sql .= $this->separator . "OFFSET $offset ROWS";
         if ($this->hasLimit($limit)) {
