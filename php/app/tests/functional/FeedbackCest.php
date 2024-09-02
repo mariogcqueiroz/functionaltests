@@ -5,11 +5,12 @@ class LoginFormCest
     public function _before(\FunctionalTester $I)
     {
         $I->amLoggedInAs(1);
-        $I->amOnRoute('feedback/create');
+
     }
 
     public function sendFeedbackSuccessfully(\FunctionalTester $I)
     {
+        $I->amOnRoute('feedback/create');
         $I->submitForm('form', [
             'Feedback[nome]' => 'Alessandro',
             'Feedback[email]' => 'asdsd@asdasd.com',

@@ -31,6 +31,7 @@ CREATE TABLE public.feedback
     nome text,
     email text,
     feedback text,
+    idade smallint,
     CONSTRAINT pk_fb PRIMARY KEY (id)
 )
     WITH (
