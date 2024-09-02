@@ -18,6 +18,9 @@ class Feedback(models.Model):
     feedback = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:
+        permissions = [
+            ("change_only_yours", "Pode mudar apenas seus dados de Feedback"),
+        ]
         managed = True
         db_table = 'feedback'
 
