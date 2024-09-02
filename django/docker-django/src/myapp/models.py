@@ -21,6 +21,8 @@ class Feedback(models.Model):
         managed = True
         db_table = 'feedback'
 
+
+
 class DemoModel(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
