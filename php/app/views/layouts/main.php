@@ -3,6 +3,8 @@
 /** @var yii\web\View $this */
 /** @var string $content */
 
+use webvimark\modules\UserManagement\components\GhostMenu;
+use webvimark\modules\UserManagement\UserManagementModule;
 use yii\helpers\Html;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Nav;
@@ -33,25 +35,29 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+    echo GhostMenu::widget([
+        'encodeLabels'=>false,
+        'activateParents'=>true,
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-        ]
+            [
+                'label' => 'Backend routes',
+                'items'=>UserManagementModule::menuItems()
+            ],
+            [
+                'label' => 'Frontend routes',
+                'items'=>[
+                    ['label'=>'Login', 'url'=>['/user-management/auth/login']],
+                    ['label'=>'Logout', 'url'=>['/user-management/auth/logout']],
+                    ['label'=>'Registration', 'url'=>['/user-management/auth/registration']],
+                    ['label'=>'Change own password', 'url'=>['/user-management/auth/change-own-password']],
+                    ['label'=>'Password recovery', 'url'=>['/user-management/auth/password-recovery']],
+                    ['label'=>'E-mail confirmation', 'url'=>['/user-management/auth/confirm-email']],
+                ],
+            ],
+        ],
     ]);
     NavBar::end();
+
     ?>
 </header>
 

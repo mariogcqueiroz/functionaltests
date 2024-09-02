@@ -21,6 +21,9 @@ class FeedbackController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'ghost-access'=> [
+                    'class' => 'webvimark\modules\UserManagement\components\GhostAccessControl',
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
