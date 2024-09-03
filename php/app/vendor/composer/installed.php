@@ -881,7 +881,7 @@
         'webvimark/module-user-management' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '6e4e7498a95870eaf16c5f317e79ec318e0e023a',
+            'reference' => '18b1ae02586b1bbf015688fc3f4b66e439c4ac4a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../webvimark/module-user-management',
             'aliases' => array(

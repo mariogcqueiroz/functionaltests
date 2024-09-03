@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3745a100f353aeca8b996c68498b1114",
+    "content-hash": "ea93522a47fa7232736187cfe5b1b33d",
     "packages": [
         {
             "name": "behat/gherkin",
@@ -4864,13 +4864,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webvimark/user-management.git",
-                "reference": "6e4e7498a95870eaf16c5f317e79ec318e0e023a"
+                "url": "https://github.com/phdcoder/webvimark.git",
+                "reference": "18b1ae02586b1bbf015688fc3f4b66e439c4ac4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webvimark/user-management/zipball/6e4e7498a95870eaf16c5f317e79ec318e0e023a",
-                "reference": "6e4e7498a95870eaf16c5f317e79ec318e0e023a",
+                "url": "https://api.github.com/repos/phdcoder/webvimark/zipball/18b1ae02586b1bbf015688fc3f4b66e439c4ac4a",
+                "reference": "18b1ae02586b1bbf015688fc3f4b66e439c4ac4a",
                 "shasum": ""
             },
             "require": {
@@ -4889,13 +4889,11 @@
                     "webvimark\\modules\\UserManagement\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "description": "User with improved RBAC",
             "support": {
-                "issues": "https://github.com/webvimark/user-management/issues",
-                "source": "https://github.com/webvimark/user-management/tree/master"
+                "source": "https://github.com/phdcoder/webvimark/tree/master"
             },
-            "time": "2021-08-14T18:04:50+00:00"
+            "time": "2024-09-03T00:26:43+00:00"
         },
         {
             "name": "yiisoft/yii2",

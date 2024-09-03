@@ -25,10 +25,7 @@ class RegistrationForm extends Model
 			[['username', 'password', 'repeat_password', 'captcha'], 'required'],
 			[['username', 'password', 'repeat_password'], 'trim'],
 
-			['username', 'unique',
-				'targetClass'     => 'webvimark\modules\UserManagement\models\User',
-				'targetAttribute' => 'username',
-			],
+            ['username', 'validateEmailConfirmedUnique'],
 
 			['username', 'purgeXSS'],
 
@@ -52,6 +49,26 @@ class RegistrationForm extends Model
 
 		return $rules;
 	}
+
+    /**
+     * Check that there is no such confirmed E-mail in the system
+     */
+    public function validateEmailConfirmedUnique()
+    {
+        if ( $this->username )
+        {
+            $exists = User::findOne([
+                'email'           => $this->username,
+                'email_confirmed' => 1,
+                'status'          => User::STATUS_ACTIVE,
+            ]);
+
+            if( $exists )
+            {
+                $this->addError('username', UserManagementModule::t('front', 'This E-mail already exists'));
+            }
+        }
+    }
 
 	/**
 	 * Remove possible XSS stuff
@@ -168,7 +185,7 @@ class RegistrationForm extends Model
 	 *
 	 * @return bool|User
 	 */
-	public function checkConfirmationToken($token)
+	public function checkConfirmationToken($token, $login = true)
 	{
 		$user = User::findInactiveByConfirmationToken($token);
 
@@ -187,7 +204,10 @@ class RegistrationForm extends Model
 				User::assignRole($user->id, $role);
 			}
 
-			Yii::$app->user->login($user);
+            if( $login )
+            {
+                Yii::$app->user->login($user);
+            }
 
 			return $user;
 		}

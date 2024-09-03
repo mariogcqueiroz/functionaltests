@@ -20,7 +20,7 @@ class m141023_141535_create_user_visit_log extends Migration
 			$this->createTable($table_name, array(
 				'id'             => 'pk',
 				'token'          => 'string not null',
-				'ip'             => 'varchar(15) not null',
+				'ip'             => 'varchar(255) not null',
 				'language'       => 'char(2) not null',
 				'browser_and_os' => 'string not null',
 				'user_id'        => 'int',

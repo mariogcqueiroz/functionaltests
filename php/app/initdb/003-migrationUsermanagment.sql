@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS "user" (
   superadmin smallint DEFAULT '0',
   created_at int NOT NULL,
   updated_at int NOT NULL,
-  registration_ip varchar(15) DEFAULT NULL,
+  registration_ip varchar(255) DEFAULT NULL,
   bind_to_ip varchar(255) DEFAULT NULL,
   email varchar(128) DEFAULT NULL,
   email_confirmed smallint NOT NULL DEFAULT '0',
@@ -307,7 +307,7 @@ CREATE SEQUENCE user_visit_log_seq;
 CREATE TABLE IF NOT EXISTS user_visit_log (
   id int NOT NULL DEFAULT NEXTVAL ('user_visit_log_seq'),
   token varchar(255) NOT NULL,
-  ip varchar(15) NOT NULL,
+  ip varchar(255) NOT NULL,
   language char(2) NOT NULL,
   user_agent varchar(255) NOT NULL,
   user_id int DEFAULT NULL,

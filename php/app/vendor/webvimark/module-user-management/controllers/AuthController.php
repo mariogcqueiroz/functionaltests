@@ -5,12 +5,15 @@ namespace webvimark\modules\UserManagement\controllers;
 use webvimark\components\BaseController;
 use webvimark\modules\UserManagement\components\UserAuthEvent;
 use webvimark\modules\UserManagement\models\forms\ChangeOwnPasswordForm;
+use webvimark\modules\UserManagement\models\forms\ChangeOwnUsernameForm;
 use webvimark\modules\UserManagement\models\forms\ConfirmEmailForm;
 use webvimark\modules\UserManagement\models\forms\LoginForm;
 use webvimark\modules\UserManagement\models\forms\PasswordRecoveryForm;
+use webvimark\modules\UserManagement\models\forms\RegistrationForm;
 use webvimark\modules\UserManagement\models\User;
 use webvimark\modules\UserManagement\UserManagementModule;
 use Yii;
+use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -29,7 +32,7 @@ class AuthController extends BaseController
 	public function actions()
 	{
 		return [
-			'captcha' => $this->module->captchaOptions,
+			'captcha' => Yii::$app->getModule('user-management')->captchaOptions,
 		];
 	}
 
@@ -71,7 +74,50 @@ class AuthController extends BaseController
 		return $this->redirect(Yii::$app->homeUrl);
 	}
 
-	/**
+    /**
+     * Change your own password
+     *
+     * @throws \yii\web\ForbiddenHttpException
+     * @return string|\yii\web\Response
+     */
+    public function actionChangeOwnUsername()
+    {
+        if ( Yii::$app->user->isGuest )
+        {
+            return $this->goHome();
+        }
+
+        $user = User::getCurrentUser();
+
+        if ( $user->status != User::STATUS_ACTIVE )
+        {
+            throw new ForbiddenHttpException();
+        }
+
+        $model = new ChangeOwnUsernameForm();
+        $model->username = $user->username;
+
+        if ( Yii::$app->request->isAjax AND $model->load(Yii::$app->request->post()) )
+        {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ( $model->load(Yii::$app->request->post()) )
+        {
+            $user->username = $model->username;
+            if( $user->save() )
+            {
+                Yii::$app->session->setFlash('success', 'A felhasználónév sikeresen módosítva.');
+                return $this->redirect(Url::current());
+            }
+        }
+
+        return $this->renderIsAjax('changeOwnUsername', compact('model'));
+    }
+
+
+    /**
 	 * Change your own password
 	 *
 	 * @throws \yii\web\ForbiddenHttpException
@@ -100,9 +146,13 @@ class AuthController extends BaseController
 			return ActiveForm::validate($model);
 		}
 
-		if ( $model->load(Yii::$app->request->post()) AND $model->changePassword() )
+		if ( $model->load(Yii::$app->request->post()) )
 		{
-			return $this->renderIsAjax('changeOwnPasswordSuccess');
+            if( $model->changePassword() )
+            {
+                Yii::$app->session->setFlash('success', 'A jelszó sikeresen módosítva.');
+                return $this->redirect(Url::current());
+            }
 		}
 
 		return $this->renderIsAjax('changeOwnPassword', compact('model'));
@@ -202,95 +252,98 @@ class AuthController extends BaseController
 	}
 
 
-	/**
-	 * Form to recover password
-	 *
-	 * @return string|\yii\web\Response
-	 */
-	public function actionPasswordRecovery()
-	{
-		if ( !Yii::$app->user->isGuest )
-		{
-			return $this->goHome();
-		}
+    /**
+     * Form to recover password
+     *
+     * @return string|\yii\web\Response
+     */
+    public function actionPasswordRecovery()
+    {
+        if ( !Yii::$app->user->isGuest )
+        {
+            return $this->goHome();
+        }
 
-		$model = new PasswordRecoveryForm();
+        $model = new PasswordRecoveryForm();
 
-		if ( Yii::$app->request->isAjax AND $model->load(Yii::$app->request->post()) )
-		{
-			Yii::$app->response->format = Response::FORMAT_JSON;
+        if ( Yii::$app->request->isAjax AND $model->load(Yii::$app->request->post()) )
+        {
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
-			// Ajax validation breaks captcha. See https://github.com/yiisoft/yii2/issues/6115
-			// Thanks to TomskDiver
-			$validateAttributes = $model->attributes;
-			unset($validateAttributes['captcha']);
+            // Ajax validation breaks captcha. See https://github.com/yiisoft/yii2/issues/6115
+            // Thanks to TomskDiver
+            $validateAttributes = $model->attributes;
+            unset($validateAttributes['captcha']);
 
-			return ActiveForm::validate($model, $validateAttributes);
-		}
+            return ActiveForm::validate($model, $validateAttributes);
+        }
 
-		if ( $model->load(Yii::$app->request->post()) AND $model->validate() )
-		{
-			if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
-			{
-				if ( $model->sendEmail(false) )
-				{
-					if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
-					{
-						return $this->renderIsAjax('passwordRecoverySuccess');
-					}
-				}
-				else
-				{
-					Yii::$app->session->setFlash('error', UserManagementModule::t('front', "Unable to send message for email provided"));
-				}
-			}
-		}
+        if ( $model->load(Yii::$app->request->post()) AND $model->validate() )
+        {
+            if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
+            {
+                if ( $model->sendEmail(false) )
+                {
+                    if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_REQUEST, ['model'=>$model]) )
+                    {
+                        return $this->renderIsAjax('passwordRecoverySuccess', ['model' => $model]);
+                    }
+                }
+                else
+                {
+                    Yii::$app->session->setFlash('error', UserManagementModule::t('front', "Unable to send message for email provided"));
+                }
+            }
+        }
 
-		return $this->renderIsAjax('passwordRecovery', compact('model'));
-	}
+        return $this->renderIsAjax('passwordRecovery', compact('model'));
+    }
 
-	/**
-	 * Receive token, find user by it and show form to change password
-	 *
-	 * @param string $token
-	 *
-	 * @throws \yii\web\NotFoundHttpException
-	 * @return string|\yii\web\Response
-	 */
-	public function actionPasswordRecoveryReceive($token)
-	{
-		if ( !Yii::$app->user->isGuest )
-		{
-			return $this->goHome();
-		}
+    /**
+     * Receive token, find user by it and show form to change password
+     *
+     * @param string $token
+     *
+     * @throws \yii\web\NotFoundHttpException
+     * @return string|\yii\web\Response
+     */
+    public function actionPasswordRecoveryReceive($token)
+    {
+        if ( !Yii::$app->user->isGuest )
+        {
+            return $this->goHome();
+        }
 
-		$user = User::findByConfirmationToken($token);
+        $user = User::findByConfirmationToken($token);
+        if ( !$user )
+        {
+            $user = (new RegistrationForm())->checkConfirmationToken($token, false);
+            if( !$user )
+            {
+                throw new NotFoundHttpException(UserManagementModule::t('front', 'Token not found. It may be expired. Try reset password once more'));
+            }
+        }
 
-		if ( !$user )
-		{
-			throw new NotFoundHttpException(UserManagementModule::t('front', 'Token not found. It may be expired. Try reset password once more'));
-		}
+        $model = new ChangeOwnPasswordForm([
+            'scenario'=>'restoreViaEmail',
+            'user'=>$user,
+        ]);
 
-		$model = new ChangeOwnPasswordForm([
-			'scenario'=>'restoreViaEmail',
-			'user'=>$user,
-		]);
+        if ( $model->load(Yii::$app->request->post()) AND $model->validate() )
+        {
+            if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_COMPLETE, ['model'=>$model]) )
+            {
+                $model->changePassword(false);
 
-		if ( $model->load(Yii::$app->request->post()) AND $model->validate() )
-		{
-			if ( $this->triggerModuleEvent(UserAuthEvent::BEFORE_PASSWORD_RECOVERY_COMPLETE, ['model'=>$model]) )
-			{
-				$model->changePassword(false);
+                if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_COMPLETE, ['model'=>$model]) )
+                {
+                    return $this->renderIsAjax('changeOwnPasswordSuccess');
+                }
+            }
+        }
 
-				if ( $this->triggerModuleEvent(UserAuthEvent::AFTER_PASSWORD_RECOVERY_COMPLETE, ['model'=>$model]) )
-				{
-					return $this->renderIsAjax('changeOwnPasswordSuccess');
-				}
-			}
-		}
-
-		return $this->renderIsAjax('changeOwnPassword', compact('model'));
-	}
+        return $this->renderIsAjax('changeOwnPassword', compact('model'));
+    }
 
 	/**
 	 * @return string|\yii\web\Response

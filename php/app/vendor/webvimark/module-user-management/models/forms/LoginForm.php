@@ -101,14 +101,30 @@ class LoginForm extends Model
 	 * Finds user by [[username]]
 	 * @return User|null
 	 */
-	public function getUser()
-	{
-		if ( $this->_user === false )
-		{
-			$u = new \Yii::$app->user->identityClass;
-			$this->_user = ($u instanceof User ? $u->findByUsername($this->username) : User::findByUsername($this->username));
-		}
+    public function getUser()
+    {
+        if ( $this->_user === false )
+        {
+            $u = new \Yii::$app->user->identityClass;
+            if( $u instanceof User )
+            {
+                $user = $u->findByUsername($this->username);
+                if( empty($user) )
+                {
+                    $user = $u::findOne(['email' => $this->username]);
+                }
+            }
+            else
+            {
+                $user = User::findByUsername($this->username);
+                if( empty($user) )
+                {
+                    $user = User::findOne(['email' => $this->username]);
+                }
+            }
+            $this->_user = $user;
+        }
 
-		return $this->_user;
-	}
+        return $this->_user;
+    }
 }

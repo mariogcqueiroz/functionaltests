@@ -63,4 +63,23 @@ class UserController extends AdminDefaultController
 		return $this->renderIsAjax('changePassword', compact('model'));
 	}
 
+    /**
+     * @param $id integer
+     * @return \yii\web\Response
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionSwitch($id)
+    {
+        $model = User::findOne($id);
+        if( !empty($model) )
+        {
+            if( Yii::$app->user->id != $model->id )
+            {
+                Yii::$app->user->logout();
+                Yii::$app->user->login($model);
+            }
+            return $this->redirect(['/']);
+        }
+        throw new NotFoundHttpException('A felhasználó nem található.');
+    }
 }

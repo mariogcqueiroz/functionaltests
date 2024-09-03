@@ -6,10 +6,10 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var webvimark\modules\UserManagement\models\forms\ChangeOwnPasswordForm $model
+ * @var \webvimark\modules\UserManagement\models\forms\ChangeOwnUsernameForm $model
  */
 
-$this->title = UserManagementModule::t('back', 'Change own password');
+$this->title = 'Felhasználónév módosítása';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="change-own-password">
@@ -27,15 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'validateOnBlur'=>false,
 				]); ?>
 
-				<?php if ( $model->scenario != 'restoreViaEmail' ): ?>
-					<?= $form->field($model, 'current_password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
-
-				<?php endif; ?>
-
-				<?= $form->field($model, 'password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
-
-				<?= $form->field($model, 'repeat_password')->passwordInput(['maxlength' => 255, 'autocomplete'=>'off']) ?>
-
+				<?= $form->field($model, 'username')->textInput(['maxlength' => 255]) ?>
 
                 <hr/>
 
