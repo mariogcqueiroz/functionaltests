@@ -1,11 +1,14 @@
 version: "3.9"
 
+volumes:
+  dbfiles: {}
+  
 services:
   db:
     image: phdcoder/postgresbr
     restart: always
     volumes:
-      - base_feedback:/var/lib/postgresql/data/pgdata
+      - dbfiles:/var/lib/postgresql/data/pgdata
       - ./initdb:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: $USER
@@ -46,6 +49,3 @@ services:
       && ./yii migrate --interactive=0
       && export XDEBUG_CONFIG=\"remote_connect_back=0 remote_enable=1 remote_host=host.docker.internal\"
       && supervisord -c  /etc/supervisor/supervisord.conf"
-volumes:
-  base_feedback:
-    external: true
