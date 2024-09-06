@@ -1,9 +1,6 @@
-FROM python:3.8-alpine
-
-RUN apk add --update \
-    rust cargo build-base libffi-dev openssl-dev \
-    xmlsec xmlsec-dev \
-  && rm -rf /var/cache/apk/*
+FROM python:3.9-bullseye
+RUN apt update
+RUN apt-get install cargo libffi-dev -y
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
