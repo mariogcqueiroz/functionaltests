@@ -6158,8 +6158,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "yiisoft/yii2-bootstrap": 20,
-        "yiisoft/yii2-bootstrap4": 20,
-        "webvimark/module-user-management": 20
+        "yiisoft/yii2-bootstrap4": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
