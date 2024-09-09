@@ -12,6 +12,7 @@ use Yii;
  * @property string|null $email
  * @property string|null $feedback
  * @property int|null $idade
+ * @property string|null $created_by
  */
 class Feedback extends \yii\db\ActiveRecord
 {
@@ -47,6 +48,7 @@ class Feedback extends \yii\db\ActiveRecord
             'email' => 'E-mail',
             'feedback' => 'Feedback',
             'idade' => 'Idade',
+            'author' => 'Usuario'
         ];
     }
 }
